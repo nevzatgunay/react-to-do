@@ -33,7 +33,7 @@ class App extends Component {
           <ul className="list-group">
             { 
               this.state.todos.map((item) => {
-                return <li className="list-group-item">{ item.name }</li>
+                return <li key={ item.id } className="list-group-item">{ item.name }</li>
               })
             }
           </ul>
