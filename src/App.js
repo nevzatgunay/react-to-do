@@ -11,6 +11,10 @@ class App extends Component {
 
       newTodo: '',
 
+      editing: false,
+
+      editingIndex: null,
+
       todos : [{
         id: 1, name:'Wash the dishes'
       },
@@ -24,6 +28,10 @@ class App extends Component {
 
     this.addTodo = this.addTodo.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.updateTodo = this.updateTodo.bind(this);
+    this.editTodo = this.editTodo.bind(this);
+    this.generateTodoId = this.generateTodoId.bind(this);
   }
 
   handleChange(event){
@@ -33,10 +41,20 @@ class App extends Component {
     });
   }
 
+  generateTodoId(){
+    const lastTodo = this.state.todos[this.state.todos.length - 1]
+
+    if(lastTodo){
+      return lastTodo.id + 1;
+    }
+
+    return 1;
+  }
+
   addTodo(){
     const newTodo = {
       name: this.state.newTodo,
-      id: this.state.todos[this.state.todos.length - 1].id + 1
+      id: this.generateTodoId()
     };
 
     const todos = this.state.todos;
@@ -46,6 +64,41 @@ class App extends Component {
       todos: todos,
       newTodo: ''
     });
+  }
+
+  editTodo(index){
+
+    const todo = this.state.todos[index];
+
+    this.setState({
+      editing: true,
+      newTodo: todo.name,
+      editingIndex: index
+    });
+  }
+
+  updateTodo(){
+    const todo = this.state.todos[this.state.editingIndex];
+
+    todo.name = this.state.newTodo;
+
+    const todos = this.state.todos;
+
+    todos[this.state.editingIndex] = todo;
+
+    this.setState({ 
+      todos, 
+      editing: false, 
+      editingIndex: null,
+      newTodo: '' });
+  }
+
+  deleteTodo(index){
+    const todos = this.state.todos;
+
+    delete todos[index];
+
+    this.setState({ todos });
   }
 
   render() {
@@ -70,19 +123,40 @@ class App extends Component {
             onChange={ this.handleChange }/>
 
           <button 
-            onClick={ this.addTodo }
+            onClick={ this.state.editing ? this.updateTodo : this.editTodo }
             className="btn-info mb-3 form-control">
-            Add a to-do
+            { this.setState.editing ? 'Update todo' : 'Add todo'}
           </button>
           
 
-          <ul className="list-group">
+          {
+            !this.state.editing && 
+            <ul className="list-group">
             { 
-              this.state.todos.map((item) => {
-                return <li key={ item.id } className="list-group-item">{ item.name }</li>
+              this.state.todos.map((item, index) => {
+                return <li key={ item.id } className="list-group-item">
+                    <button 
+                      
+                      className="btn-sm mr-4 btn btn-info"
+                      
+                      onClick= { () => { this.editTodo(index); } }
+
+                    >U</button>
+                    
+                    { item.name }
+                    
+                    <button 
+                      
+                      className="btn-sm ml-4 btn btn-danger"
+                      
+                      onClick= { () => { this.deleteTodo(index); } }
+
+                    >X</button>
+                  </li>
               })
             }
           </ul>
+          }
         </div>
       </div>
     );
