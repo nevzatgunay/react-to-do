@@ -8,7 +8,7 @@ const ListItem = (props) => {
                 
                 onClick= { props.editTodo }
 
-                >U</button>
+                >Update</button>
                 
                 { props.item.name }
                 
@@ -18,7 +18,7 @@ const ListItem = (props) => {
                 
                 onClick= { props.deleteTodo }
 
-                >X</button>
+                >Delete</button>
             </li>
 };
 
