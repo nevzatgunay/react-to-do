@@ -133,7 +133,7 @@ class App extends Component {
 
           {
             this.state.notification && 
-            <div className="alert mt-3 alert-success">
+            <div className="alert mb-6 alert-success">
               <p className="text-center">{ this.state.notification }</p>
             </div>
           }
@@ -141,14 +141,16 @@ class App extends Component {
           <input 
             type="text" 
             name="todo"
-            className="m-4 form-control" 
+            className="m-6 form-control" 
             placeholder="Add a new to-do"
             value={ this.state.newTodo }
             onChange={ this.handleChange }/>
 
           <button 
             onClick={ this.state.editing ? this.updateTodo : this.addTodo }
-            className="btn-info mb-3 form-control">
+            className="btn-info mb-3 form-control"
+            disabled={ this.state.newTodo.length < 5 }
+          >
             { this.setState.editing ? 'Update todo' : 'Add todo'}
           </button>
           
