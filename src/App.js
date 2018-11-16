@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 import ListItem from './ListItem';
@@ -16,6 +15,8 @@ class App extends Component {
       editing: false,
 
       editingIndex: null,
+
+      notification: null,
 
       todos : [{
         id: 1, name:'Wash the dishes'
@@ -34,6 +35,7 @@ class App extends Component {
     this.updateTodo = this.updateTodo.bind(this);
     this.editTodo = this.editTodo.bind(this);
     this.generateTodoId = this.generateTodoId.bind(this);
+    this.alert = this.alert.bind(this);
   }
 
   handleChange(event){
@@ -66,6 +68,8 @@ class App extends Component {
       todos: todos,
       newTodo: ''
     });
+
+    this.alert('Todo added successfully!');
   }
 
   editTodo(index){
@@ -92,7 +96,8 @@ class App extends Component {
       todos, 
       editing: false, 
       editingIndex: null,
-      newTodo: '' });
+      newTodo: '' 
+    });
   }
 
   deleteTodo(index){
@@ -101,6 +106,21 @@ class App extends Component {
     delete todos[index];
 
     this.setState({ todos });
+
+    this.alert('Todo deleted successfully!');
+  }
+
+  alert(notification){
+    this.setState({
+      notification
+    });
+
+    setTimeout(() => {
+      this.setState({
+        notification: null
+      });
+    }, 2000);
+
   }
 
   render() {
@@ -109,13 +129,15 @@ class App extends Component {
 
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-          To-Do
-          </p>
-        </header>
         <div className="container">
+
+          {
+            this.state.notification && 
+            <div className="alert mt-3 alert-success">
+              <p className="text-center">{ this.state.notification }</p>
+            </div>
+          }
+          
           <input 
             type="text" 
             name="todo"
@@ -125,7 +147,7 @@ class App extends Component {
             onChange={ this.handleChange }/>
 
           <button 
-            onClick={ this.state.editing ? this.updateTodo : this.editTodo }
+            onClick={ this.state.editing ? this.updateTodo : this.addTodo }
             className="btn-info mb-3 form-control">
             { this.setState.editing ? 'Update todo' : 'Add todo'}
           </button>
