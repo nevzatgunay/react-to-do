@@ -4,6 +4,8 @@ This project is a basic To-Do app for learning React. You can contribute it fore
 
 The project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+Demo is here: https://nevzatgunay-react-todo.netlify.com/ :muscle: 
+
 ## Available Scripts
 
 In the project directory, you can run:
