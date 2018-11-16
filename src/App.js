@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import axios from 'axios';
 
 import ListItem from './ListItem';
 
@@ -18,24 +19,25 @@ class App extends Component {
 
       notification: null,
 
-      todos : [{
-        id: 1, name:'Wash the dishes'
-      },
-      {
-        id: 2, name:'go to the gym' 
-      },
-      {
-        id: 3, name:'read your book'
-      }]
+      todos : []
     };
+
+    this.apiUrl = 'https://5bee71247839000013e6fa70.mockapi.io';
 
     this.addTodo = this.addTodo.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
     this.editTodo = this.editTodo.bind(this);
-    this.generateTodoId = this.generateTodoId.bind(this);
     this.alert = this.alert.bind(this);
+  }
+
+  async componentDidMount(){
+    const response = await axios.get(`${this.apiUrl}/todos`);
+
+    this.setState({
+      todos: response.data
+    });
   }
 
   handleChange(event){
@@ -45,24 +47,15 @@ class App extends Component {
     });
   }
 
-  generateTodoId(){
-    const lastTodo = this.state.todos[this.state.todos.length - 1]
+  async addTodo(){
 
-    if(lastTodo){
-      return lastTodo.id + 1;
-    }
+    const response = await axios.post(`${this.apiUrl}/todos`, {
+      name: this.state.newTodo
+    });
 
-    return 1;
-  }
-
-  addTodo(){
-    const newTodo = {
-      name: this.state.newTodo,
-      id: this.generateTodoId()
-    };
 
     const todos = this.state.todos;
-    todos.push(newTodo);
+    todos.push(response.data);
 
     this.setState({
       todos: todos,
